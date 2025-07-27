@@ -9,6 +9,7 @@ conn.execute("""CREATE TABLE IF NOT EXISTS books(
    id INT PRIMARY KEY,
    name TEXT,
    author TEXT,
-   status PRESENT OR ABSENT);
+   status TEXT);
 """)
 conn.commit()
+@app.get("/")
