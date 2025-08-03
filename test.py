@@ -29,3 +29,9 @@ INSERT INTO books(name , author , status) VALUES
 """, (name , author , status))
    conn.commit()
    conn.close()
+def REMOVE(id):
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute("DELETE  FROM books WHERE id = ?" , (id))
+    conn.commit()
+    conn.close
