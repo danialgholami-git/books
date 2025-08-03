@@ -34,4 +34,12 @@ def REMOVE(id):
     cursor = conn.cursor()
     cursor.execute("DELETE  FROM books WHERE id = ?" , (id))
     conn.commit()
-    conn.close
+    conn.close()
+def UPDATE(name , author , status , id):
+    conn = get_conn()
+    curser = conn.cursor()
+    curser.execute("""
+UPDATE books SET name = ?,author = ?,status = ? WHERE id = ?
+""" , (name , author , status , id))
+    conn.commit()
+    conn.close()
