@@ -3,6 +3,9 @@ write this command : uvicorn test:app --reload
 
 
 APIs you can use:
+GET/http://127.0.0.1:8000/all_books
+*for see all books
+
 POST/http://127.0.0.1:8000/books --write json:
 {
     "name" : "books name " ,
@@ -11,12 +14,11 @@ POST/http://127.0.0.1:8000/books --write json:
 }
 *for add book
 
-GET/http://127.0.0.1:8000/books?id=books id
+GET/http://127.0.0.1:8000/books/id
 *for find book
 
-PUT/http://127.0.0.1:8000/books --write json:
+PUT/http://127.0.0.1:8000/books/id --write json:
 {
-    "id" : books id ,
     "name" : "books name" ,
     "author" : "books author" ,
     "status" : "present or absent"
@@ -25,3 +27,5 @@ PUT/http://127.0.0.1:8000/books --write json:
 
 DELETE/http://127.0.0.1:8000/books?id=books id
 *for delete book
+
+TIP:when you run the project,the database with name=data.sqlite will be create
