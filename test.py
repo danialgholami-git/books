@@ -57,11 +57,6 @@ class Books(BaseModel):
     name : str
     author : str
     status : str
-class update_books(BaseModel):
-    id : int
-    name : str
-    author : str
-    status : str
 
 @app.get("/")
 def online():
@@ -85,7 +80,7 @@ def add_book(book : Books):
            status_code=200 ,
            content={"message": "book was added"}
         )
-@app.get("/books")
+@app.get("/books/{id}")
 def get_book(id: int):
     conn = get_conn()
     cursor = conn.cursor()
@@ -105,8 +100,8 @@ def get_book(id: int):
             status_code=404,
             detail=f"Book with id {id} not found"
         )
-@app.put("/books")
-def update_book(book : update_books):
+@app.put("/books/{id}")
+def update_book(book : Books , id=id):
     if not book.author or not book.name:
         raise HTTPException(
             status_code=400 ,
@@ -118,18 +113,18 @@ def update_book(book : update_books):
             status_code=400 ,
             detail= "message : status most be (present) or (absent)"
         )
-    elif not book_exists_for_update(book.id):
+    elif not book_exists_for_update(id):
         raise HTTPException(
             status_code=404 ,
-            detail=f"Book with id {book.id} not found"
+            detail=f"Book with id {id} not found"
         )
     else:
-        UPDATE(book.name , book.author , book.status , book.id)
+        UPDATE(book.name , book.author , book.status , id)
         return JSONResponse(
             status_code=200 ,
             content={"message" : "book has been updated"}
         )
-@app.delete("/books")
+@app.delete("/books/{id}")
 def delete_book(id: int):
     conn = get_conn()
     cursor = conn.cursor()
@@ -147,3 +142,22 @@ def delete_book(id: int):
             status_code=200 ,
             content={"message" : "book has been deleted"}
             )
+@app.get("/all_books")
+def get_all_books():
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name, author, status FROM books")
+    rows = cursor.fetchall()
+    conn.close()
+    if not rows:
+        return {"message": "no books found"}
+    else:
+        return [
+        {
+            "id": row[0],
+            "name": row[1],
+            "author": row[2],
+            "status": row[3]
+        }
+        for row in rows
+    ]
